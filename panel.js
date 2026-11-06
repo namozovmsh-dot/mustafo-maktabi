@@ -57,7 +57,7 @@ function renderRecList(){
 async function toggleRecord(id){
   if(mr&&mr.state==="recording"){const same=recId===id;stopRecording(false);if(same)return}
   if(!navigator.mediaDevices||!window.MediaRecorder){toast("Bu brauzerda ovoz yozib bo'lmaydi");return}
-  try{recStream=recStream||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){toast("Mikrofonga ruxsat berilmadi");return}
+  try{recStream=recStream||await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){toast("Mikrofon: "+e.name+". Sozlamalarda ruxsat bering");return}
   chunks=[];const type=["audio/mp4","audio/webm;codecs=opus","audio/webm"].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
   mr=new MediaRecorder(recStream,type?{mimeType:type}:undefined);recId=id;
   mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
@@ -65,6 +65,30 @@ async function toggleRecord(id){
   mr.start();renderRecList();
 }
 function stopRecording(cancel){if(mr&&mr.state==="recording"){mr._cancel=cancel;mr.stop()}}
+
+/* ---- mikrofon tekshiruvi ---- */
+$("#micTest").onclick=async()=>{const L=$("#micLog");L.hidden=false;L.textContent="";const log=t=>{L.textContent+=t+"\n"};
+  $("#micTest").disabled=true;stopAll();stopListen();
+  try{
+    log("Ilova: "+(navigator.standalone?"bosh ekrandan":"Safari ichida")+" · "+(navigator.userAgent.match(/OS [\d_]+/)||[""])[0]);
+    log("Nutqni tanish (iPad): "+(SR?"bor":"YO'Q")+" · micDenied="+micDenied+" · aiOnly="+(typeof aiOnly!=="undefined"?aiOnly:"-"));
+    log("Ovoz yozish (MediaRecorder): "+(window.MediaRecorder?"bor":"YO'Q"));
+    let st;try{st=await navigator.mediaDevices.getUserMedia({audio:true});log("1) Mikrofon ruxsati: ✓")}
+    catch(e){log("1) Mikrofon ruxsati: ✗ "+e.name+" "+(e.message||""));throw 0}
+    log("2) 3 soniya gapiring…");
+    const C=window.AudioContext||window.webkitAudioContext;const c=new C();await c.resume();const src=c.createMediaStreamSource(st),an=c.createAnalyser();an.fftSize=2048;src.connect(an);
+    const d=new Float32Array(an.fftSize);let mx=0;const t0=Date.now();while(Date.now()-t0<3000){an.getFloatTimeDomainData(d);let s=0;for(const x of d)s+=x*x;mx=Math.max(mx,Math.sqrt(s/d.length));await sleep(50)}
+    log("   Ovoz balandligi: "+mx.toFixed(3)+(mx>0.02?" ✓ eshitildi":" ✗ juda past yoki jim"));
+    st.getTracks().forEach(t=>t.stop());c.close();
+    if(SR){log("3) iPad nutq tanishi: 5 soniya ichida \"olma\" deng…");
+      const r=await new Promise(res=>{let out="",err="";const x=new SR();x.lang=settings.recLang;x.interimResults=false;
+        x.onresult=e=>{for(const q of e.results)out+=q[0].transcript};x.onerror=e=>{err=e.error};x.onend=()=>res({out,err});
+        try{x.start()}catch(e){res({out:"",err:"start: "+e.message})}setTimeout(()=>{try{x.stop()}catch(e){}},5000)});
+      log("   "+(r.out?"✓ eshitdi: \""+r.out+"\"":"✗ eshitmadi"+(r.err?" (xato: "+r.err+")":"")));
+      micDenied=false;fastEnds=0}
+    log("Tayyor. Shu yozuvning rasmini yuboring.");
+  }catch(e){if(e!==0)log("Xato: "+(e&&e.message||e))}
+  $("#micTest").disabled=false};
 
 /* ---- natijalar ---- */
 function renderProgress(){
