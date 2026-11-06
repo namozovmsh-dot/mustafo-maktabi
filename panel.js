@@ -80,11 +80,14 @@ $("#micTest").onclick=async()=>{const L=$("#micLog");L.hidden=false;L.textConten
     const d=new Float32Array(an.fftSize);let mx=0;const t0=Date.now();while(Date.now()-t0<3000){an.getFloatTimeDomainData(d);let s=0;for(const x of d)s+=x*x;mx=Math.max(mx,Math.sqrt(s/d.length));await sleep(50)}
     log("   Ovoz balandligi: "+mx.toFixed(3)+(mx>0.02?" ✓ eshitildi":" ✗ juda past yoki jim"));
     st.getTracks().forEach(t=>t.stop());c.close();
-    if(SR){log("3) iPad nutq tanishi: 5 soniya ichida \"olma\" deng…");
-      const r=await new Promise(res=>{let out="",err="";const x=new SR();x.lang=settings.recLang;x.interimResults=false;
-        x.onresult=e=>{for(const q of e.results)out+=q[0].transcript};x.onerror=e=>{err=e.error};x.onend=()=>res({out,err});
-        try{x.start()}catch(e){res({out:"",err:"start: "+e.message})}setTimeout(()=>{try{x.stop()}catch(e){}},5000)});
-      log("   "+(r.out?"✓ eshitdi: \""+r.out+"\"":"✗ eshitmadi"+(r.err?" (xato: "+r.err+")":"")));
+    if(SR){const ok={};
+      for(const lang of ["uz-UZ","ru-RU"]){
+        log(`3) iPad nutq tanishi (${lang==="uz-UZ"?"o'zbekcha":"ruscha"}): 5 soniya ichida "olma" deng…`);
+        const r=await new Promise(res=>{let out="",err="",done=false;const fin=()=>{if(!done){done=true;res({out,err})}};const x=new SR();x.lang=lang;x.interimResults=true;
+          x.onresult=e=>{out="";for(const q of e.results)out+=q[0].transcript};x.onerror=e=>{err=e.error};x.onend=fin;
+          try{x.start()}catch(e){err="start: "+e.message;fin()}setTimeout(()=>{try{x.stop()}catch(e){}},5000);setTimeout(()=>{err=err||"javob kelmadi";try{x.abort()}catch(e){}fin()},8000)});
+        log("   "+(r.out?"✓ eshitdi: \""+r.out+"\"":"✗ eshitmadi"+(r.err?" (xato: "+r.err+")":"")));ok[lang]=!!r.out}
+      if(!ok["uz-UZ"]&&ok["ru-RU"]){settings.recLang="ru-RU";saveSettings();$("#set_recLang").value="ru-RU";log("→ iPad ruscha tinglashga o'tkazildi (o'zbekcha so'zlarni ham tushunadi).")}
       micDenied=false;fastEnds=0}
     log("Tayyor. Shu yozuvning rasmini yuboring.");
   }catch(e){if(e!==0)log("Xato: "+(e&&e.message||e))}

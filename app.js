@@ -99,6 +99,8 @@ function listen(handler){
       if(!finalText&&Date.now()-started<700){if(++fastEnds>=5)micDenied=true}else fastEnds=0;
       if(h)setTimeout(()=>h(finalText||null),finalText?0:200)};
     rec.start();micEl.classList.add("on");
+    /* iPad ba'zan tinglashni tugatmay qotib qoladi: 12 soniyada majburan to'xtatamiz */
+    const me=rec;setTimeout(()=>{if(rec===me){try{me.abort()}catch(e){}setTimeout(()=>{if(rec===me&&me.onend)me.onend()},400)}},12000);
   }catch(e){micEl.classList.remove("on");onHeard=null;handler(null)}
 }
 function stopListen(){if(stopCap)stopCap();onHeard=null;if(rec){try{rec.abort()}catch(e){}}rec=null;micEl.classList.remove("on")}
