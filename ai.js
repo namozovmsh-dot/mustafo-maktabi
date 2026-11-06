@@ -1,7 +1,7 @@
 "use strict";
 /* ======================= AI (Gemini, tekin kalit) ======================= */
 const AI={key:LS.get("aiKey",""),voice:LS.get("aiVoice","Leda"),on:LS.get("aiOn",1),cooldownUntil:0,
-  textModels:["gemini-3.8-flash","gemini-3.5-flash-lite","gemini-2.5-flash"],ttsModels:["gemini-3.8-flash-tts","gemini-3.8-flash-lite-tts","gemini-2.5-flash-preview-tts"]};
+  textModels:["gemini-3.8-flash","gemini-3.5-flash-lite","gemini-2.5-flash"],ttsModels:["gemini-3.8-flash-tts","gemini-3.1-flash-tts-preview","gemini-3.8-flash-lite-tts","gemini-2.5-flash-preview-tts"]};
 const VOICES=[["Leda","yosh, quvnoq"],["Aoede","yengil, mayin"],["Zephyr","yorqin"],["Kore","aniq, ishonchli"],["Callirrhoe","xotirjam"],["Despina","silliq"],["Laomedeia","jo'shqin"],["Achernar","yumshoq"],["Sulafat","iliq"],["Vindemiatrix","nozik"]];
 const GBASE="https://generativelanguage.googleapis.com/v1beta/";
 function aiReady(){return !!AI.key&&AI.on==1&&Date.now()>AI.cooldownUntil&&navigator.onLine!==false}
