@@ -35,7 +35,7 @@ function renderGen(){
   $("#genCount").textContent=`${ready} / ${total} ta gap tayyor`;
   $("#genBtn").textContent=GEN.running?"■ To'xtatish":(ready<total?"▶ Fotima opa ovozini tayyorlash":"✓ Hammasi tayyor");
   $("#genBtn").disabled=!AI.key||(!GEN.running&&ready>=total);
-  $("#genNote").textContent=GEN.running?"Tayyorlanmoqda… Panelni yopsangiz ham davom etadi.":GEN.stopReason==="limit"?"Bugungi tekin limit tugadi. Ertaga shu tugmani yana bosing, qolganidan davom etadi.":GEN.stopReason==="key"?"Kalit ishlamadi.":GEN.stopReason.startsWith("error")?"Xato bo'ldi: "+GEN.stopReason.slice(6):"Har bir gap bir marta tayyorlanadi va iPad'da saqlanadi.";
+  $("#genNote").textContent=GEN.running&&GEN.stopReason==="wait"?"Tekin limit: biroz kutib, o'zi davom etadi…":GEN.running?"Tayyorlanmoqda… Panelni yopsangiz ham davom etadi.":GEN.stopReason==="limit"?"Bugungi tekin limit tugadi. Ertaga shu tugmani yana bosing, qolganidan davom etadi.":GEN.stopReason==="key"?"Kalit ishlamadi.":GEN.stopReason.startsWith("error")?"Xato bo'ldi: "+GEN.stopReason.slice(6):"Har bir gap bir marta tayyorlanadi va iPad'da saqlanadi.";
 }
 $("#genBtn").onclick=()=>{if(GEN.running){GEN.running=false;return}runGen(()=>{if(!$("#panel").hidden){renderGen();renderRecList()}});renderGen()};
 
