@@ -4,7 +4,11 @@ const AI={key:LS.get("aiKey",""),voice:LS.get("aiVoice","Leda"),on:LS.get("aiOn"
   textModels:["gemini-3.8-flash","gemini-3.5-flash-lite","gemini-2.5-flash"],ttsModels:["gemini-3.8-flash-tts","gemini-3.1-flash-tts-preview","gemini-3.8-flash-lite-tts","gemini-2.5-flash-preview-tts"]};
 const VOICES=[["Leda","yosh, quvnoq"],["Aoede","yengil, mayin"],["Zephyr","yorqin"],["Kore","aniq, ishonchli"],["Callirrhoe","xotirjam"],["Despina","silliq"],["Laomedeia","jo'shqin"],["Achernar","yumshoq"],["Sulafat","iliq"],["Vindemiatrix","nozik"]];
 const GBASE="https://generativelanguage.googleapis.com/v1beta/";
-function aiReady(){return !!AI.key&&AI.on==1&&Date.now()>AI.cooldownUntil&&navigator.onLine!==false}
+/* kunlik jonli AI javoblar chegarasi (pulni tejash) */
+let aiUse=LS.get("aiUse",{day:"",n:0});
+function aiLeft(){const d=new Date().toDateString();if(aiUse.day!==d)aiUse={day:d,n:0};const mx=+settings.aiMax;return mx===0||aiUse.n<mx}
+function aiCount(){aiLeft();aiUse.n++;LS.set("aiUse",aiUse)}
+function aiReady(){return !!AI.key&&AI.on==1&&aiLeft()&&Date.now()>AI.cooldownUntil&&navigator.onLine!==false}
 class AiErr extends Error{constructor(m,status){super(m);this.status=status}}
 async function gpost(path,body,ms=25000){
   const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),ms);

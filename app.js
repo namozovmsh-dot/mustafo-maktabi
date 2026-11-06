@@ -6,7 +6,7 @@ const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const LS={get(k,d){try{const v=localStorage.getItem("mm3_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("mm3_"+k,JSON.stringify(v))}catch(e){}}};
 function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3000)}
-const settings=Object.assign({mic:1,recLang:"uz-UZ",time:60,rate:0.85},LS.get("settings",{}));
+const settings=Object.assign({mic:1,recLang:"uz-UZ",time:60,rate:0.85,aiMax:20},LS.get("settings",{}));
 function saveSettings(){LS.set("settings",settings)}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 

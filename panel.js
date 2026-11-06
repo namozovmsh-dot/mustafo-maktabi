@@ -12,12 +12,12 @@ function openPanel(){session++;stopAll();stopListen();quiz=null;$("#panel").hidd
   $("#aiKey").value=AI.key?"••••••••"+AI.key.slice(-4):"";
   const vs=$("#aiVoice");vs.innerHTML=VOICES.map(([v,d])=>`<option value="${v}">${v} — ${d}</option>`).join("");vs.value=AI.voice;
   $("#aiOn").value=String(AI.on);
-  ["mic","recLang","time","rate"].forEach(k=>{$("#set_"+k).value=String(settings[k])});
+  ["mic","recLang","time","rate","aiMax"].forEach(k=>{$("#set_"+k).value=String(settings[k])});
   $("#micNote").textContent=SR?"Mikrofon birinchi marta ruxsat so'raydi: \"Ruxsat berish\"ni bosing. Agar iPad o'zbekchani yomon tushunsa, \"Ruscha\"ni tanlab ko'ring: o'zbekcha \"uch\" desa ham tushunadi.":"Bu brauzerda nutqni tanish yo'q. Gemini kaliti bo'lsa, AI tinglaydi; aks holda Mustafo bosib javob beradi.";
   const fs=$("#recFilter");if(!fs.options.length){fs.innerHTML=[...new Set(PHRASE_IDS.map(id=>PHRASES[id].grp))].map(g=>`<option>${esc(g)}</option>`).join("")}
   renderGen();renderRecList();renderProgress()}
 $("#closePanel").onclick=()=>{stopRecording(true);
-  ["mic","time"].forEach(k=>settings[k]=+$("#set_"+k).value);settings.recLang=$("#set_recLang").value;settings.rate=+$("#set_rate").value;saveSettings();
+  ["mic","time","aiMax"].forEach(k=>settings[k]=+$("#set_"+k).value);settings.recLang=$("#set_recLang").value;settings.rate=+$("#set_rate").value;saveSettings();
   AI.on=+$("#aiOn").value;LS.set("aiOn",AI.on);
   $("#panel").hidden=true;goMenu()};
 

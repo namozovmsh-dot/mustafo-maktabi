@@ -134,7 +134,7 @@ async function waitAnswer(){
   if(my!==session||quiz!==q)return;
   if(r.matched)return answer(r.matched);
   if(r.wav&&aiReady()&&(q.aiCount||0)<2&&Date.now()-(window.__lastAi||0)>5000){
-    q.aiCount=(q.aiCount||0)+1;window.__lastAi=Date.now();
+    q.aiCount=(q.aiCount||0)+1;window.__lastAi=Date.now();aiCount();
     heardEl.textContent="🤔 …";
     try{const o=await aiUnderstand(q,r.wav,r.srText);if(my!==session||quiz!==q)return;
       heardEl.textContent=o.heard?"🗣 "+o.heard:"";idleCount=0;
