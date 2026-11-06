@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Mustafo maktabi</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mustafo">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#EAF6F1">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+/* Tepada Fotima opa, o'rtada katta rasm-taxta, pastda javob tugmalari. iPad uchun. */
+:root{
+  --bg:#EAF6F1; --paper:#FFFFFF; --ink:#2E2346; --muted:#6B6385; --line:#CFE3DA;
+  --accent:#F28A2E; --leaf:#2FA36B; --sky:#3C8DDB; --sun:#F5C842; --berry:#D94C6A;
+  --shadow:0 5px 0 rgba(46,35,70,.13);
+  --display:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold",system-ui,sans-serif;
+  --body:ui-rounded,system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:20px;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;overflow:hidden;
+  padding:env(safe-area-inset-top,0) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0) max(16px,env(safe-area-inset-left,0px))}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+[hidden]{display:none!important}
+.screen{height:100%;display:flex;flex-direction:column;gap:12px;padding-block:12px;max-width:1100px;margin:0 auto}
+.top{display:flex;align-items:center;gap:12px}
+.home{border:2px solid var(--line);background:var(--paper);border-radius:16px;font-size:28px;width:56px;height:56px;flex:none}
+.teacher{flex:1;min-width:0;display:flex;gap:12px;align-items:center}
+.main{flex:1;min-height:0;display:flex;gap:16px}
+.content{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:12px}
+.side{flex:none;display:flex;align-items:flex-start;justify-content:center;width:var(--fs);transition:width .4s ease}
+:root{--fs:min(34vw,calc(100vh - 140px),400px)}
+body.asking{--fs:min(20vw,220px)}
+@media (orientation:portrait){:root{--fs:min(36vw,330px)}body.asking{--fs:min(24vw,200px)}}
+@media (max-width:560px){:root,body.asking{--fs:96px}}
+.face{flex:none;width:var(--fs);height:var(--fs);border-radius:min(32px,12%);background:var(--sun);box-shadow:var(--shadow);overflow:hidden;position:relative;transition:width .4s ease,height .4s ease}
+.face svg{width:100%;height:100%;display:block}
+.face .frames{position:absolute;inset:0;animation:idle 4s ease-in-out infinite;transform-origin:50% 90%}
+.face .frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}.face .frames img.on{opacity:1}
+.face.photo svg{display:none}
+@keyframes idle{0%,100%{transform:scale(1.04) rotate(0)}30%{transform:scale(1.06) rotate(-1.5deg) translateY(-1px)}70%{transform:scale(1.05) rotate(1.5deg)}}
+.face.talk{animation:bob .6s ease-in-out infinite alternate}
+.face.happy{animation:hop .45s ease-in-out 2}
+@keyframes hop{50%{transform:translateY(-10px) rotate(-6deg)}}
+.face .eye{transform-box:fill-box;transform-origin:center;transition:transform .08s}
+.face.blink .eye{transform:scaleY(.1)}
+.face .smileEye{display:none}
+.face.happy .eye{display:none}.face.happy .smileEye{display:inline}
+.face .cheek{transition:opacity .2s;opacity:.45}.face.happy .cheek{opacity:.85}
+@keyframes bob{to{transform:translateY(-3px) rotate(2deg)}}
+.bubble{flex:1;min-width:0;background:var(--paper);border:2px solid var(--line);border-radius:22px 22px 22px 6px;padding:10px 16px;font-weight:700;font-size:22px;line-height:1.3;min-height:56px;display:flex;align-items:center}
+.stars{font-family:var(--display);font-weight:800;font-size:26px;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:6px 14px;display:flex;gap:6px;align-items:center;font-variant-numeric:tabular-nums;flex:none}
+.stars b{color:var(--sun)}
+.gear{border:0;background:none;font-size:26px;opacity:.35;width:44px;height:44px;flex:none;position:relative}
+.gear .ring{position:absolute;inset:2px;border-radius:50%;border:3px solid var(--accent);transform:scale(0)}
+.gear.holding .ring{transform:scale(1);transition:transform 1.6s linear}
+.menu{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-content:start;padding:4px 2px 10px}
+.menu{grid-template-columns:repeat(3,1fr)}
+@media (max-width:820px){.menu{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.menu{grid-template-columns:repeat(2,1fr)}}
+.topic{border:0;border-radius:26px;padding:16px 8px 12px;font-family:var(--display);font-weight:800;font-size:21px;color:#fff;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;line-height:1.1}
+.topic .big{font-size:46px;line-height:1.1}
+.topic:active{transform:translateY(4px);box-shadow:none}
+.pbar{width:70%;height:8px;border-radius:99px;background:rgba(255,255,255,.35);overflow:hidden}
+.pbar i{display:block;height:100%;background:#fff}
+.stage{flex:1;min-height:0;background:var(--paper);border:2px solid var(--line);border-radius:30px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;text-align:center;position:relative;overflow:hidden}
+#show{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:100%}
+.pic{font-size:clamp(60px,11vw,110px);line-height:1.05;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;max-width:92%}
+.pic.one{font-size:clamp(110px,20vw,190px)}
+.pic.many{font-size:clamp(40px,6.5vw,68px)}
+.pic.lots{font-size:clamp(32px,5vw,52px)}
+.pic span{border-radius:14px;transition:transform .15s}
+.pic span.on{transform:scale(1.18);background:color-mix(in srgb,var(--sun) 45%,transparent)}
+.pic .gone{opacity:.25;filter:grayscale(1)}
+.grp{display:flex;flex-wrap:wrap;justify-content:center;max-width:5.4em;gap:2px 6px}
+.op{color:var(--leaf);font-weight:800}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(84px,15vw,160px);line-height:.95;color:var(--accent)}
+.big .lo{font-size:.55em;color:var(--muted);margin-left:.15em}
+.big.sum{font-size:clamp(56px,9vw,100px)}
+.blob{width:clamp(150px,26vw,240px);aspect-ratio:1;border-radius:50%;border:5px solid var(--line);max-width:100%}
+.badge{width:clamp(130px,20vw,190px);aspect-ratio:1;border-radius:30px;background:var(--sky);color:#fff;font-family:var(--display);font-weight:800;font-size:clamp(70px,11vw,110px);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.badge small{font-size:.28em;opacity:.9}
+.badge.sm{width:90px;font-size:48px;border-radius:20px}
+.tens{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.tens .bar,.tens .units{display:flex;gap:5px;padding:4px;border-radius:10px;transition:background .2s}
+.tens .bar.on{background:color-mix(in srgb,var(--sun) 55%,transparent)}
+.tens b{width:clamp(16px,2.6vw,26px);aspect-ratio:1;border-radius:50%;background:var(--sky)}
+.tens .units b{background:var(--accent)}
+.words{display:flex;gap:10px 20px;flex-wrap:wrap;justify-content:center;font-family:var(--display);font-weight:800;font-size:clamp(24px,3.4vw,36px)}
+.words span{padding:2px 14px;border-radius:14px;background:var(--bg)}
+.words .on{background:var(--sun);color:#2E2346}
+.choices{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.choice{min-width:118px;height:118px;padding:0 12px;border-radius:28px;border:3px solid var(--line);background:var(--bg);font-family:var(--display);font-weight:800;font-size:64px;box-shadow:var(--shadow);display:grid;place-items:center;line-height:1}
+.choice.sw{width:118px;border-radius:50%;padding:0}
+.choice:active{transform:translateY(4px);box-shadow:none}
+.choice.right{background:var(--leaf);border-color:var(--leaf);color:#fff;animation:pop .45s}
+.choice.sw.right{outline:7px solid var(--leaf);outline-offset:4px}
+.choice.wrong{animation:shake .4s;opacity:.4}
+.choice.hint{animation:pulse 1s infinite}
+@keyframes pop{50%{transform:scale(1.15)}}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes pulse{50%{transform:scale(1.08);box-shadow:0 0 0 8px color-mix(in srgb,var(--sun) 70%,transparent)}}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.row4 .cell{width:clamp(110px,17vw,170px);aspect-ratio:1;border-radius:24px;background:var(--bg);display:grid;place-items:center;font-size:clamp(60px,9vw,100px)}
+.row4 .cell .pic.one{font-size:inherit}
+.row4 .cell .blob{width:80%}
+.row4.cover .cell{background:var(--sky);color:#fff}
+.gamebar{position:absolute;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.gamebar i{width:18px;height:18px;border-radius:50%;background:var(--line)}
+.gamebar i.ok{background:var(--sun)}
+.mic{position:absolute;top:14px;right:14px;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:var(--bg);border:2px solid var(--line);opacity:.4}
+.mic.on{opacity:1;background:#FFE3E3;border-color:var(--berry);animation:pulse 1.4s infinite}
+.heard{position:absolute;top:22px;left:20px;max-width:calc(50% - 60px);text-align:left;color:var(--muted);font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bottom{display:flex;justify-content:center;gap:14px}
+.nav{border:0;border-radius:20px;background:var(--accent);color:#fff;font-family:var(--display);font-weight:800;font-size:26px;padding:12px 28px;box-shadow:var(--shadow)}
+.nav.soft{background:var(--paper);color:var(--ink);border:2px solid var(--line)}
+.nav:active{transform:translateY(4px);box-shadow:none}
+.cover{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:30;text-align:center;padding:24px}
+.cover h1{font-family:var(--display);font-size:clamp(40px,8vw,72px);margin:0;line-height:1}
+.cover h1 span{color:var(--accent)}
+.go{border:0;border-radius:999px;background:var(--leaf);color:#fff;font-family:var(--display);font-weight:800;font-size:40px;padding:22px 56px;box-shadow:var(--shadow)}
+.cover p{color:var(--muted);font-weight:700;max-width:36ch;margin:0}
+.panel{position:fixed;inset:0;background:var(--bg);z-index:40;overflow:auto;-webkit-user-select:text;user-select:text;
+  padding:calc(env(safe-area-inset-top,0px) + 16px) max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+.panel .in{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.panel h2{font-family:var(--display);margin:0;font-size:30px}
+.panel h3{margin:4px 0 0;font-size:20px}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card p{margin:0;color:var(--muted);font-size:16px;line-height:1.45}
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;font-size:18px;flex-wrap:wrap}
+.field select,.field input{font:inherit;font-size:17px;padding:8px 10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-width:0}
+.field input{flex:1}
+.bar{height:12px;background:var(--bg);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf);width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:8px 14px;font-weight:800;font-size:16px}
+.small:disabled{opacity:.4}
+.small.live,.rec.live{background:var(--berry);color:#fff;border-color:var(--berry)}
+.list{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow:auto}
+.li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:12px;background:var(--bg);font-size:16px}
+.li span{flex:1;min-width:0}
+.li .ok{color:var(--leaf)}.li .no{color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-weight:700;z-index:60;font-size:17px;max-width:90vw}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.confetti i{position:absolute;top:-40px;font-style:normal;font-size:38px;animation:fall 1.5s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="top">
+    <button class="home" id="homeBtn" aria-label="Menyu" hidden>🏠</button>
+    <div class="teacher"><div class="bubble" id="bubble">Salom, Mustafo!</div></div>
+    <div class="stars"><b>★</b><span id="stars">0</span></div>
+    <button class="gear" id="gear" aria-label="Ota-ona paneli (2 soniya bosib turing)">⚙︎<span class="ring"></span></button>
+  </div>
+  <div class="main">
+  <div class="side"><div class="face" id="face" role="img" aria-label="Fotima opa"><svg viewBox="0 0 100 100" aria-hidden="true">
+<path d="M14 100 Q16 74 50 72 Q84 74 86 100Z" fill="#E86A8E"/>
+<path d="M42 70 h16 v8 q-8 5 -16 0z" fill="#F1C3A0"/>
+<path d="M20 52 Q16 18 50 14 Q84 18 80 52 Q82 70 74 80 L26 80 Q18 70 20 52Z" fill="#3B2418"/>
+<ellipse cx="50" cy="50" rx="23" ry="26" fill="#F6D2B4"/>
+<path d="M27 42 Q30 22 52 22 Q72 23 74 42 Q64 30 50 32 Q40 31 27 42Z" fill="#3B2418"/>
+<circle cx="72" cy="30" r="5" fill="#F5C842" stroke="#E0A520" stroke-width="1.2"/><circle cx="72" cy="30" r="1.8" fill="#E86A8E"/>
+<path d="M35 41 q5 -3 10 0" stroke="#3B2418" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M55 41 q5 -3 10 0" stroke="#3B2418" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g class="eye"><ellipse cx="40" cy="48" rx="3.6" ry="4.4" fill="#2A1A12"/><circle cx="41.2" cy="46.6" r="1.2" fill="#fff"/></g>
+<g class="eye"><ellipse cx="60" cy="48" rx="3.6" ry="4.4" fill="#2A1A12"/><circle cx="61.2" cy="46.6" r="1.2" fill="#fff"/></g>
+<path class="smileEye" d="M36 49 q4 -5 8 0 M56 49 q4 -5 8 0" stroke="#2A1A12" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<ellipse class="cheek" cx="33" cy="58" rx="4.5" ry="3" fill="#F08A9A"/><ellipse class="cheek" cx="67" cy="58" rx="4.5" ry="3" fill="#F08A9A"/>
+<path d="M49 52 q1.5 4 -1 5" stroke="#D9A585" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<path id="mouth" d="M43 63 Q50 64.5 57 63 Q50 68 43 63Z" fill="#B23A55"/>
+</svg><div class="frames" id="faceImg" hidden></div></div></div>
+  <div class="content">
+  <div class="menu" id="menu"></div>
+  <div class="stage" id="stage" hidden>
+    <div class="heard" id="heard"></div>
+    <div class="gamebar" id="gameBar"></div>
+    <div class="mic" id="mic" aria-hidden="true">🎤</div>
+    <div id="show"></div>
+    <div class="words" id="words"></div>
+    <div class="choices" id="choices"></div>
+  </div>
+  <div class="bottom" id="bottom" hidden>
+    <button class="nav soft" id="repeatBtn">🔊 Yana</button>
+    <button class="nav" id="nextBtn">Keyingi ▶</button>
+  </div>
+  </div>
+  </div>
+</div>
+
+<div class="cover" id="cover">
+  <div style="font-size:110px">👩‍🏫</div>
+  <h1>Mustafo <span>maktabi</span></h1>
+  <button class="go" id="goBtn">▶ Boshladik!</button>
+  <p>Ota-ona: sozlamalar uchun ⚙︎ belgisini 2 soniya bosib turing.</p>
+</div>
+<div class="cover" id="rest" hidden>
+  <div style="font-size:120px">😴</div>
+  <h1>Dam olish vaqti!</h1>
+  <p>Ota-ona: davom ettirish uchun tugmani 2 soniya bosib turing.</p>
+  <button class="small" id="unlockBtn">Davom ettirish</button>
+</div>
+
+<div class="panel" id="panel" hidden>
+  <div class="in">
+    <div class="row" style="justify-content:space-between"><h2>Ota-ona uchun</h2><button class="nav" id="closePanel">Tayyor</button></div>
+    <div class="card">
+      <h3>1. Fotima opa ovozi (Gemini AI, tekin)</h3>
+      <p>aistudio.google.com/apikey saytida Google akkauntingiz bilan "Create API key"ni bosing va kalitni shu yerga qo'ying. Kalit faqat shu iPad'da saqlanadi.</p>
+      <div class="field"><input id="aiKey" type="password" placeholder="Gemini kaliti" autocomplete="off"><button class="small" id="aiSave">Saqlash</button></div>
+      <label class="field">Ovoz<select id="aiVoice"></select></label>
+      <div class="row"><button class="small" id="aiTest">🔊 Ovozni eshitib ko'rish</button><span id="aiStatus" style="font-weight:700;font-size:16px"></span></div>
+      <div class="bar"><i id="genBar"></i></div>
+      <div class="row" style="justify-content:space-between"><span id="genCount" style="font-weight:700"></span><button class="small" id="genBtn">▶ Fotima opa ovozini tayyorlash</button></div>
+      <p id="genNote"></p>
+      <label class="field">Darsdan tashqari savollarga AI javob bersin<select id="aiOn"><option value="1">Ha</option><option value="0">Yo'q</option></select></label>
+      <p>Tekin tarifda Google suhbatlarni o'z xizmatlarini yaxshilash uchun ishlatishi mumkin. AI'ga bolaning ismi yuborilmaydi.</p>
+    </div>
+    <div class="card">
+      <h3>2. Sozlamalar</h3>
+      <label class="field">Mustafo gapirib javob bersin<select id="set_mic"><option value="1">Ha</option><option value="0">Yo'q, faqat bosadi</option></select></label>
+      <label class="field">iPad qaysi tilni tinglasin<select id="set_recLang"><option value="uz-UZ">O'zbekcha</option><option value="ru-RU">Ruscha</option><option value="en-US">Inglizcha</option></select></label>
+      <label class="field">Kunlik vaqt<select id="set_time"><option value="0">Cheklovsiz</option><option value="30">30 daqiqa</option><option value="45">45 daqiqa</option><option value="60">1 soat</option><option value="90">1,5 soat</option></select></label>
+      <label class="field">Ruscha va inglizcha ovoz tezligi<select id="set_rate"><option value="0.7">Sekin</option><option value="0.85">O'rtacha</option><option value="1">Oddiy</option></select></label>
+      <p id="micNote"></p>
+    </div>
+    <div class="card">
+      <h3>3. Natijalar</h3>
+      <p id="usageNote"></p>
+      <div class="list" id="progList"></div>
+      <div class="row"><button class="small" id="resetProg">Natijalarni nolga</button></div>
+    </div>
+    <div class="card">
+      <h3>4. O'z ovozingiz (ixtiyoriy)</h3>
+      <p>Biror gap yoqmasa, uni o'z ovozingiz bilan almashtiring: ● bosing, gapiring, ■ bosing.</p>
+      <label class="field">Bo'lim<select id="recFilter"></select></label>
+      <div class="list" id="recList"></div>
+    </div>
+    <div class="card">
+      <h3>5. Zaxira</h3>
+      <p>Ilovani bosh ekranga qo'shing (Safari → Ulashish → "Bosh ekranga"). Ovozlar tayyor bo'lgach, zaxirani saqlab qo'ying.</p>
+      <div class="row"><button class="small" id="exportBtn">⬇ Zaxirani saqlash</button><label class="small" style="cursor:pointer">⬆ Zaxiradan tiklash<input type="file" id="importIn" accept=".json,application/json" hidden></label></div>
+    </div>
+  </div>
+</div>
+<div class="confetti" id="confetti"></div>
+<script src="content.js"></script>
+<script src="app.js"></script>
+<script src="ai.js"></script>
+<script src="game.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>
